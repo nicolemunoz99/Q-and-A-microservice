@@ -52,6 +52,7 @@ const updateAnswer = (id) => {
   return new Promise (
     (resolve, reject) => {
       Photos.find({answer_id: id}, (err, photoDocs) => {
+        // photoDocs.toArray((err, arr) => {console.log('arr', arr)})
         Answers.findOneAndUpdate({id: id}, {photos: photoDocs}, {new: true}, (err, doc) => {
           resolve(doc)
         })
@@ -79,15 +80,15 @@ const questionCursor = Questions.find({}).cursor();
 
 answerCursor.eachAsync(answer => {
     let answerDoc = answer;
-    return updateAnswer(answerDoc.id).then (() => {console.log('questionID in aswer:', answerDoc.question_id)})
+    return updateAnswer(answerDoc.id).then (() => {console.log('updated answer with ID', answerDoc.id)})
 })
-.then (() => {
-  console.log('Complete: Answers updated with Photos')
-  questionCursor.eachAsync(question => {
-    let questionDoc = question;
-    return updateQuestion(questionDoc.id).then(() => {console.log('docID: ', questionDoc.id)})
-  }). then (() => {
-    console.log('Complete: Questions updated with Answers \n All Done!!!!!')
-  })
-})
+// .then (() => {
+//   console.log('Complete: Answers updated with Photos')
+//   questionCursor.eachAsync(question => {
+//     let questionDoc = question;
+//     return updateQuestion(questionDoc.id).then(() => {console.log('docID: ', questionDoc.id)})
+//   }). then (() => {
+//     console.log('Complete: Questions updated with Answers \n All Done!!!!!')
+//   })
+// })
 
