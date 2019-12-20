@@ -53,8 +53,7 @@ async function schemaFuncs() {
   });
 
   // Create the SCHEMA with user auth if it doesn't exist
-  let createSql = `CREATE SCHEMA IF NOT EXISTS
-${schemaName} AUTHORIZATION ${postgresRole};`;
+  let createSql = `CREATE SCHEMA IF NOT EXISTS ${schemaName} AUTHORIZATION ${postgresRole};`;
 
   // Log the SQL statement to console
   console.log("\ncreateSql:", createSql);
