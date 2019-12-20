@@ -2,7 +2,7 @@ const pg = require('pg');
 const Pool = require("pg").Pool;
 
 // Declare a constant for the schema name
-const schemaName = "answers";
+const schemaName = "data";
 
 // Declare Postgres ROLE
 const postgresRole = "nicole";
@@ -73,8 +73,8 @@ ${schemaName} AUTHORIZATION ${postgresRole};`;
     if (createRes) {
       console.log("\nCREATE SCHEMA RESULT:", createRes.command);
 
-      let createTableSql = `CREATE TABLE ${schemaName}.table(
-id INT primary key,
+      let createTableSql = `CREATE TABLE ${schemaName}.answers(
+id SERIAL primary key,
 question_id INT,
 body VARCHAR,
 date_written VARCHAR,
@@ -82,7 +82,7 @@ answerer_name VARCHAR,
 answerer_email VARCHAR,
 reported INT DEFAULT 0 CHECK(reported=0 OR reported=1),
 helpful INT DEFAULT 0,
-FOREIGN KEY (question_id) REFERENCES questions.table (id)
+FOREIGN KEY (question_id) REFERENCES data.questions (id)
 );`;
 
       console.log("\ncreateTableSql:", createTableSql);
