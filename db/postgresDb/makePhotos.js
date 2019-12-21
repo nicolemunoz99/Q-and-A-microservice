@@ -74,10 +74,10 @@ ${schemaName} AUTHORIZATION ${postgresRole};`;
       console.log("\nCREATE SCHEMA RESULT:", createRes.command);
 
       let createTableSql = `CREATE TABLE ${schemaName}.photos(
-id INT primary key,
+id SERIAL primary key,
 answer_id INT,
 url VARCHAR,
-FOREIGN KEY (answer_id) REFERENCES answers.table (id)
+FOREIGN KEY (answer_id) REFERENCES data.answers (answer_id)
 );`;
 
       console.log("\ncreateTableSql:", createTableSql);
@@ -102,3 +102,4 @@ FOREIGN KEY (answer_id) REFERENCES answers.table (id)
 }
 
 schemaFuncs();
+console.log('Photos schema created')

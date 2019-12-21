@@ -53,8 +53,7 @@ async function schemaFuncs() {
   });
 
   // Create the SCHEMA with user auth if it doesn't exist
-  let createSql = `CREATE SCHEMA IF NOT EXISTS
-${schemaName} AUTHORIZATION ${postgresRole};`;
+  let createSql = `CREATE SCHEMA IF NOT EXISTS ${schemaName} AUTHORIZATION ${postgresRole};`;
 
   // Log the SQL statement to console
   console.log("\ncreateSql:", createSql);
@@ -73,16 +72,15 @@ ${schemaName} AUTHORIZATION ${postgresRole};`;
     if (createRes) {
       console.log("\nCREATE SCHEMA RESULT:", createRes.command);
 
-      let createTableSql = `CREATE TABLE ${schemaName}.answers(
-answer_id INT primary key,
-question_id INT,
-body VARCHAR,
-date VARCHAR,
-answerer_name VARCHAR,
-answerer_email VARCHAR,
+      let createTableSql = `CREATE TABLE ${schemaName}.questions(
+question_id SERIAL primary key NOT NULL,
+product_id INT NOT NULL,
+question_body VARCHAR NOT NULL,
+question_date VARCHAR NOT NULL,
+asker_name VARCHAR NOT NULL,
+asker_email VARCHAR NOT NULL,
 reported INT DEFAULT 0 CHECK(reported=0 OR reported=1),
-helpful INT DEFAULT 0,
-FOREIGN KEY (question_id) REFERENCES questions.table (id)
+helpful INT DEFAULT 0 
 );`;
 
       console.log("\ncreateTableSql:", createTableSql);
@@ -100,10 +98,13 @@ FOREIGN KEY (question_id) REFERENCES questions.table (id)
 
         if (tableRes) {
           console.log("\nCREATE TABLE RESULT:", tableRes);
+          console.log('DONNNNNEEEEE')
         }
+        
       });
     }
-  });
+  })
+  
 }
 
-schemaFuncs();
+schemaFuncs()
