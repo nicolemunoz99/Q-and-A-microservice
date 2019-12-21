@@ -15,8 +15,7 @@ client.connect(err => {
 });
 
 
-const query = (params, callback) => {
-  
+const query = (params) => {
   return new Promise ((resolve, reject) => {
     client.query(params, (err, res) => {
       if (err) {
@@ -24,8 +23,8 @@ const query = (params, callback) => {
       } else {
         resolve(res.rows);
       }
-    })
-  })
+    });
+  });
 }
 
 module.exports = query;

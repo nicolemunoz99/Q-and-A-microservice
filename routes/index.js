@@ -22,7 +22,7 @@ router.post('/:product_id', question.post);
 
 router.put ('/question/:question_id/helpful', question.helpful);
 
-router.put('/questions/:question_id/report', question.report);
+router.put('/question/:question_id/report', question.report);
 
 
 

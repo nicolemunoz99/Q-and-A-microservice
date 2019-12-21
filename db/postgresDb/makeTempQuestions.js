@@ -73,10 +73,10 @@ async function schemaFuncs() {
       console.log("\nCREATE SCHEMA RESULT:", createRes.command);
 
       let createTableSql = `CREATE TABLE ${schemaName}.questions(
-id INT primary key NOT NULL,
+question_id INT primary key NOT NULL,
 product_id INT NOT NULL,
-body VARCHAR NOT NULL,
-date_written VARCHAR NOT NULL,
+question_body VARCHAR NOT NULL,
+question_date VARCHAR NOT NULL,
 asker_name VARCHAR NOT NULL,
 asker_email VARCHAR NOT NULL,
 reported INT DEFAULT 0 CHECK(reported=0 OR reported=1),

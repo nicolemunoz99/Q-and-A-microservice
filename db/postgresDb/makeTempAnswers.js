@@ -74,10 +74,10 @@ ${schemaName} AUTHORIZATION ${postgresRole};`;
       console.log("\nCREATE SCHEMA RESULT:", createRes.command);
 
       let createTableSql = `CREATE TABLE ${schemaName}.answers(
-id INT primary key,
+answer_id INT primary key,
 question_id INT,
 body VARCHAR,
-date_written VARCHAR,
+date VARCHAR,
 answerer_name VARCHAR,
 answerer_email VARCHAR,
 reported INT DEFAULT 0 CHECK(reported=0 OR reported=1),
