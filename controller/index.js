@@ -1,10 +1,14 @@
-const model = require('../model')
+const qModel = require('../model/question.js')
+const aModel = require('../model/answer.js')
 
 module.exports = {
   question: {
     get: (req, res) => {
-      model.question.get(req.params.product_id, (err, result) => {
-        console.log('q get result in controller: ', result)
+      let timer1Start = Date.now();
+      qModel.get(req.params.product_id, (err, result) => {
+        let timer1Stop = Date.now();
+        console.log(`time(ms) to get q's for product ${req.params.product_id}: `, timer1Stop - timer1Start)
+        res.send(result)
       })
       
     },

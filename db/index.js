@@ -14,20 +14,19 @@ client.connect(err => {
   } else { console.log('connected to SQL via Postgres')}
 });
 
-const query = {
-  name: 'fetch-question',
-  text: 'SELECT * FROM questions.table WHERE id = $1',
-  values: [1],
+
+const query = (params, callback) => {
+  
+  return new Promise ((resolve, reject) => {
+    client.query(params, (err, res) => {
+      if (err) {
+        reject(err);
+      } else {
+        resolve(res.rows);
+      }
+    })
+  })
 }
 
-client.query(query, (err, res) => {
-  if (err) {
-    console.log(err.stack)
-  } else {
-    console.log(res.rows[0])
-  }
-})
+module.exports = query;
 
-async function questionQueries() {
-  let selectSchemasSql = "SELECT schema_name FROM information_schema.schemata;";
-}

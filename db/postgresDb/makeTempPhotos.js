@@ -2,7 +2,7 @@ const pg = require('pg');
 const Pool = require("pg").Pool;
 
 // Declare a constant for the schema name
-const schemaName = "photos";
+const schemaName = "data";
 
 // Declare Postgres ROLE
 const postgresRole = "nicole";
@@ -73,7 +73,7 @@ ${schemaName} AUTHORIZATION ${postgresRole};`;
     if (createRes) {
       console.log("\nCREATE SCHEMA RESULT:", createRes.command);
 
-      let createTableSql = `CREATE TABLE ${schemaName}.table(
+      let createTableSql = `CREATE TABLE ${schemaName}.photos(
 id INT primary key,
 answer_id INT,
 url VARCHAR,
