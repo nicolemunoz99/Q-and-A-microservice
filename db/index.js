@@ -15,7 +15,7 @@ client.connect(err => {
 });
 
 
-const query = (params) => {
+var dbQuery = (params) => {
   return new Promise ((resolve, reject) => {
     client.query(params, (err, res) => {
       if (err) {
@@ -27,5 +27,5 @@ const query = (params) => {
   });
 }
 
-module.exports = query;
+module.exports = dbQuery;
 

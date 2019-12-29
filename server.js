@@ -5,6 +5,7 @@ var app = express();
 const port = 8000;
 const bodyParser = require('body-parser');
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json())
 
 // date in proper format
 const requestTime = function (req, res, next) {
@@ -13,17 +14,15 @@ const requestTime = function (req, res, next) {
   let year = new Date().getFullYear();
   let day = new Date().getDate();
   day = ('0' + day).slice(-2);
-  let requestDate = `${year}-${month}-${day}T00:00:00.000Z`;
-  console.log('date at app level:', requestDate)
+  let requestDate = `${year}-${month}-${day}`;
   req.requestDate = requestDate;
-  next()
+  next();
 }
 
 app.use(requestTime)
 
 app.use('/qa/', router);
 
-app.use(bodyParser.json())
 
 app.listen(port, () => console.log('Server listening on port ' + port))
 
