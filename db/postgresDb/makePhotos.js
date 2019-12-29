@@ -95,6 +95,11 @@ ${schemaName} AUTHORIZATION ${postgresRole};`;
 
         if (tableRes) {
           console.log("\nCREATE TABLE RESULT:", tableRes);
+          let createIndexing = `CREATE INDEX answer_ref ON data.photos (answer_id);`;
+          pool.query(createIndexing, (indexingErr, indexingRes) => {
+            console.log("\nCREATE INDEXING RESULT:", indexingRes);
+          })
+          
         }
       });
     }

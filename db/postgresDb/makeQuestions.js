@@ -98,7 +98,10 @@ async function schemaFuncs() {
 
         if (tableRes) {
           console.log("\nCREATE TABLE RESULT:", tableRes);
-          console.log('DONE creating table')
+          let createIndexing = `CREATE INDEX product_and_reported_ref ON data.questions (product_id, reported);`;
+          pool.query(createIndexing, (indexingErr, indexingRes) => {
+            console.log("\nCREATE INDEXING RESULT:", indexingRes);
+          })
         }
         
       });

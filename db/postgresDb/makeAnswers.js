@@ -100,6 +100,10 @@ ${schemaName} AUTHORIZATION ${postgresRole};`;
 
         if (tableRes) {
           console.log("\nCREATE TABLE RESULT:", tableRes);
+          let createIndexing = `CREATE INDEX question_and_reported_ref ON data.answers (question_id, reported);`;
+          pool.query(createIndexing, (indexingErr, indexingRes) => {
+            console.log("\nCREATE INDEXING RESULT:", indexingRes);
+          })
         }
       });
     }
