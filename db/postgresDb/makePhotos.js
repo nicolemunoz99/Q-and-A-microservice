@@ -74,11 +74,11 @@ ${schemaName} AUTHORIZATION ${postgresRole};`;
       console.log("\nCREATE SCHEMA RESULT:", createRes.command);
 
       let createTableSql = `CREATE TABLE ${schemaName}.photos(
-id SERIAL primary key,
-answer_id INT,
-url VARCHAR,
-FOREIGN KEY (answer_id) REFERENCES data.answers (answer_id)
-);`;
+        id SERIAL primary key,
+        answer_id INT,
+        url VARCHAR,
+        FOREIGN KEY (answer_id) REFERENCES data.answers (answer_id) ON DELETE CASCADE
+        );`;
 
       console.log("\ncreateTableSql:", createTableSql);
 

@@ -73,15 +73,15 @@ async function schemaFuncs() {
       console.log("\nCREATE SCHEMA RESULT:", createRes.command);
 
       let createTableSql = `CREATE TABLE ${schemaName}.questions(
-question_id SERIAL primary key NOT NULL,
-product_id INT NOT NULL,
-question_body VARCHAR NOT NULL,
-question_date VARCHAR NOT NULL,
-asker_name VARCHAR NOT NULL,
-asker_email VARCHAR NOT NULL,
-reported INT DEFAULT 0 CHECK(reported=0 OR reported=1),
-helpful INT DEFAULT 0 
-);`;
+        question_id SERIAL primary key NOT NULL,
+        product_id INT NOT NULL,
+        question_body VARCHAR NOT NULL,
+        question_date VARCHAR NOT NULL,
+        asker_name VARCHAR NOT NULL,
+        asker_email VARCHAR NOT NULL,
+        reported INT DEFAULT 0 CHECK(reported=0 OR reported=1),
+        helpful INT DEFAULT 0 
+        );`;
 
       console.log("\ncreateTableSql:", createTableSql);
 
@@ -98,7 +98,7 @@ helpful INT DEFAULT 0
 
         if (tableRes) {
           console.log("\nCREATE TABLE RESULT:", tableRes);
-          console.log('DONNNNNEEEEE')
+          console.log('DONE creating table')
         }
         
       });

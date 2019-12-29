@@ -74,16 +74,16 @@ ${schemaName} AUTHORIZATION ${postgresRole};`;
       console.log("\nCREATE SCHEMA RESULT:", createRes.command);
 
       let createTableSql = `CREATE TABLE ${schemaName}.answers(
-answer_id SERIAL primary key,
-question_id INT,
-body VARCHAR,
-date VARCHAR,
-answerer_name VARCHAR,
-answerer_email VARCHAR,
-reported INT DEFAULT 0 CHECK(reported=0 OR reported=1),
-helpful INT DEFAULT 0,
-FOREIGN KEY (question_id) REFERENCES data.questions (question_id)
-);`;
+        answer_id SERIAL primary key,
+        question_id INT,
+        body VARCHAR,
+        date VARCHAR,
+        answerer_name VARCHAR,
+        answerer_email VARCHAR,
+        reported INT DEFAULT 0 CHECK(reported=0 OR reported=1),
+        helpful INT DEFAULT 0,
+        FOREIGN KEY (question_id) REFERENCES data.questions (question_id) ON DELETE CASCADE
+        );`;
 
       console.log("\ncreateTableSql:", createTableSql);
 
