@@ -53,8 +53,7 @@ async function schemaFuncs() {
   });
 
   // Create the SCHEMA with user auth if it doesn't exist
-  let createSql = `CREATE SCHEMA IF NOT EXISTS
-${schemaName} AUTHORIZATION ${postgresRole};`;
+  let createSql = `CREATE SCHEMA IF NOT EXISTS ${schemaName} AUTHORIZATION ${postgresRole};`;
 
   // Log the SQL statement to console
   console.log("\ncreateSql:", createSql);
@@ -74,15 +73,15 @@ ${schemaName} AUTHORIZATION ${postgresRole};`;
       console.log("\nCREATE SCHEMA RESULT:", createRes.command);
 
       let createTableSql = `CREATE TABLE ${schemaName}.questions(
-id SERIAL primary key,
-product_id INT NOT NULL,
-body VARCHAR NOT NULL,
-date_written VARCHAR NOT NULL,
-asker_name VARCHAR NOT NULL,
-asker_email VARCHAR NOT NULL,
-reported INT DEFAULT 0 CHECK(reported=0 OR reported=1),
-helpful INT DEFAULT 0 
-);`;
+        question_id SERIAL primary key NOT NULL,
+        product_id INT NOT NULL,
+        question_body VARCHAR NOT NULL,
+        question_date VARCHAR NOT NULL,
+        asker_name VARCHAR NOT NULL,
+        asker_email VARCHAR NOT NULL,
+        reported INT DEFAULT 0 CHECK(reported=0 OR reported=1),
+        helpful INT DEFAULT 0 
+        );`;
 
       console.log("\ncreateTableSql:", createTableSql);
 
@@ -99,10 +98,16 @@ helpful INT DEFAULT 0
 
         if (tableRes) {
           console.log("\nCREATE TABLE RESULT:", tableRes);
+          let createIndexing = `CREATE INDEX product_and_reported_ref ON data.questions (product_id, reported);`;
+          pool.query(createIndexing, (indexingErr, indexingRes) => {
+            console.log("\nCREATE INDEXING RESULT:", indexingRes);
+          })
         }
+        
       });
     }
-  });
+  })
+  
 }
 
-schemaFuncs();
+schemaFuncs()

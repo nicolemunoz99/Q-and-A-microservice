@@ -73,17 +73,12 @@ ${schemaName} AUTHORIZATION ${postgresRole};`;
     if (createRes) {
       console.log("\nCREATE SCHEMA RESULT:", createRes.command);
 
-      let createTableSql = `CREATE TABLE ${schemaName}.answers(
-id SERIAL primary key,
-question_id INT,
-body VARCHAR,
-date_written VARCHAR,
-answerer_name VARCHAR,
-answerer_email VARCHAR,
-reported INT DEFAULT 0 CHECK(reported=0 OR reported=1),
-helpful INT DEFAULT 0,
-FOREIGN KEY (question_id) REFERENCES data.questions (id)
-);`;
+      let createTableSql = `CREATE TABLE ${schemaName}.photos(
+        id SERIAL primary key,
+        answer_id INT,
+        url VARCHAR,
+        FOREIGN KEY (answer_id) REFERENCES data.answers (answer_id) ON DELETE CASCADE
+        );`;
 
       console.log("\ncreateTableSql:", createTableSql);
 
@@ -100,6 +95,11 @@ FOREIGN KEY (question_id) REFERENCES data.questions (id)
 
         if (tableRes) {
           console.log("\nCREATE TABLE RESULT:", tableRes);
+          let createIndexing = `CREATE INDEX answer_ref ON data.photos (answer_id);`;
+          pool.query(createIndexing, (indexingErr, indexingRes) => {
+            console.log("\nCREATE INDEXING RESULT:", indexingRes);
+          })
+          
         }
       });
     }
@@ -107,3 +107,4 @@ FOREIGN KEY (question_id) REFERENCES data.questions (id)
 }
 
 schemaFuncs();
+console.log('Photos schema created')
