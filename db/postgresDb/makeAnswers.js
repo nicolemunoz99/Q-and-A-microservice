@@ -2,7 +2,7 @@ const pg = require('pg');
 const Pool = require("pg").Pool;
 
 // Declare a constant for the schema name
-const schemaName = "answers";
+const schemaName = "data";
 
 // Declare Postgres ROLE
 const postgresRole = "nicole";
@@ -73,17 +73,17 @@ ${schemaName} AUTHORIZATION ${postgresRole};`;
     if (createRes) {
       console.log("\nCREATE SCHEMA RESULT:", createRes.command);
 
-      let createTableSql = `CREATE TABLE ${schemaName}.table(
-id INT primary key,
-question_id INT,
-body VARCHAR,
-date_written VARCHAR,
-answerer_name VARCHAR,
-answerer_email VARCHAR,
-reported INT DEFAULT 0 CHECK(reported=0 OR reported=1),
-helpful INT DEFAULT 0,
-FOREIGN KEY (question_id) REFERENCES questions.table (id)
-);`;
+      let createTableSql = `CREATE TABLE ${schemaName}.answers(
+        answer_id SERIAL primary key,
+        question_id INT,
+        body VARCHAR,
+        date VARCHAR,
+        answerer_name VARCHAR,
+        answerer_email VARCHAR,
+        reported INT DEFAULT 0 CHECK(reported=0 OR reported=1),
+        helpful INT DEFAULT 0,
+        FOREIGN KEY (question_id) REFERENCES data.questions (question_id) ON DELETE CASCADE
+        );`;
 
       console.log("\ncreateTableSql:", createTableSql);
 
@@ -100,10 +100,15 @@ FOREIGN KEY (question_id) REFERENCES questions.table (id)
 
         if (tableRes) {
           console.log("\nCREATE TABLE RESULT:", tableRes);
+          let createIndexing = `CREATE INDEX question_and_reported_ref ON data.answers (question_id, reported);`;
+          pool.query(createIndexing, (indexingErr, indexingRes) => {
+            console.log("\nCREATE INDEXING RESULT:", indexingRes);
+          })
         }
       });
     }
   });
 }
 
-schemaFuncs();
+schemaFuncs()
+console.log('Answers schema created')

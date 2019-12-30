@@ -2,7 +2,7 @@ const pg = require('pg');
 const Pool = require("pg").Pool;
 
 // Declare a constant for the schema name
-const schemaName = "photos";
+const schemaName = "data";
 
 // Declare Postgres ROLE
 const postgresRole = "nicole";
@@ -73,12 +73,12 @@ ${schemaName} AUTHORIZATION ${postgresRole};`;
     if (createRes) {
       console.log("\nCREATE SCHEMA RESULT:", createRes.command);
 
-      let createTableSql = `CREATE TABLE ${schemaName}.table(
-id INT primary key,
-answer_id INT,
-url VARCHAR,
-FOREIGN KEY (answer_id) REFERENCES answers.table (id)
-);`;
+      let createTableSql = `CREATE TABLE ${schemaName}.photos(
+        id SERIAL primary key,
+        answer_id INT,
+        url VARCHAR,
+        FOREIGN KEY (answer_id) REFERENCES data.answers (answer_id) ON DELETE CASCADE
+        );`;
 
       console.log("\ncreateTableSql:", createTableSql);
 
@@ -95,6 +95,11 @@ FOREIGN KEY (answer_id) REFERENCES answers.table (id)
 
         if (tableRes) {
           console.log("\nCREATE TABLE RESULT:", tableRes);
+          let createIndexing = `CREATE INDEX answer_ref ON data.photos (answer_id);`;
+          pool.query(createIndexing, (indexingErr, indexingRes) => {
+            console.log("\nCREATE INDEXING RESULT:", indexingRes);
+          })
+          
         }
       });
     }
@@ -102,3 +107,4 @@ FOREIGN KEY (answer_id) REFERENCES answers.table (id)
 }
 
 schemaFuncs();
+console.log('Photos schema created')
