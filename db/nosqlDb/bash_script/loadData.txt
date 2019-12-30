@@ -1,0 +1,7 @@
+#!/bin/bash
+
+mongoimport --db qanda --type csv --mode merge --headerline --file ../../../data/photos.csv --numInsertionWorkers 8
+
+mongoimport --db qanda --type csv --mode merge --headerline --file ../../../data/answers.csv --numInsertionWorkers 8
+
+mongoimport --db qanda --type csv --mode merge --headerline --file ../../../data/questions.csv --numInsertionWorkers 8

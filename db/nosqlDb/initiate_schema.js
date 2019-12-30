@@ -1,5 +1,6 @@
+// initial schemas before importing csv files
 var mongoose = require('mongoose');
-var mongoDB = 'mongodb://127.0.0.1:27017/qanda_test';
+var mongoDB = 'mongodb://127.0.0.1:27017/qanda';
 mongoose.connect(mongoDB, { useNewUrlParser: true });
 var db = mongoose.connection;
 
@@ -13,13 +14,15 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 var photoSchema = new Schema({
-  id: {type: Number, unique: true},
+  id: {type: Number},
   answer_id: Number,
   url: String
 })
 
+photoSchema.index = ({answer_id: 1})
+
 var answerSchema = new Schema({
-  id: {type: Number, unique: true},
+  id: {type: Number},
   question_id: Number,
   body: String, 
   date_written: String,
@@ -29,6 +32,8 @@ var answerSchema = new Schema({
   helpful: {default: 0},
   photos: [photoSchema]
 });
+
+answerSchema.index = ({question_id: 1, reported: 0})
 
 var questionSchema = new Schema({
   id: {type: Number, unique: true},
@@ -42,8 +47,10 @@ var questionSchema = new Schema({
   answers: [answerSchema]
 })
 
-var Questions = mongoose.model('questionModel', questionSchema, 'testquestions')
-var Answers = mongoose.model('answerModel', answerSchema, 'testanswers');
+questionSchema.index = ({question_id: 1, reported: 0})
+
+var Questions = mongoose.model('questionModel', questionSchema, 'questions')
+var Answers = mongoose.model('answerModel', answerSchema, 'answers');
 var Photos = mongoose.model('photoModel', photoSchema, 'photos')
 
 
@@ -53,8 +60,11 @@ const updateAnswer = (id) => {
     (resolve, reject) => {
       Photos.find({answer_id: id}, (err, photoDocs) => {
         // photoDocs.toArray((err, arr) => {console.log('arr', arr)})
-        Answers.findOneAndUpdate({id: id}, {photos: photoDocs}, {new: true}, (err, doc) => {
-          resolve(doc)
+        // Answers.findOneAndUpdate({id: id}, {photos: photoDocs}, {new: true}, (err, doc) => {
+        //   resolve(doc);
+        // })
+        Answers.findOne({id: id}, (err, doc) => {
+          resolve(doc);
         })
       })
     }
@@ -66,7 +76,10 @@ const updateQuestion = (id) => {
     (resolve, reject) => {
       Answers.find({question_id: id}, (err, answerDocs) => {
         console.log('answerDocs', answerDocs)
-        Questions.findOneAndUpdate({id: id}, {answers: answerDocs}, {new: true}, (err, doc) => {
+        // Questions.findOneAndUpdate({id: id}, {answers: answerDocs}, {new: true}, (err, doc) => {
+        //   resolve(doc);
+        // })
+        Questions.findOne({id: id}, (err, doc) => {
           resolve(doc);
         })
       })
@@ -74,8 +87,9 @@ const updateQuestion = (id) => {
   )
 }
 
-const answerCursor = Answers.find({}).cursor();
+const answerCursor = db.answers_aggr.find({}).cursor();
 const questionCursor = Questions.find({}).cursor();
+
 
 
 answerCursor.eachAsync(answer => {
