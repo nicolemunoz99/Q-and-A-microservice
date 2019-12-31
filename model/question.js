@@ -7,7 +7,7 @@ module.exports = {
       text: `SELECT *  
         FROM (SELECT * FROM data.questions WHERE product_id = $1 AND data.questions.reported = 0 LIMIT $2 OFFSET $3) q
         LEFT JOIN (SELECT answer_id, question_id AS questionId_fromAnswers, body AS a_body, date AS a_date, answerer_name, reported AS a_reported, helpful AS a_helpful FROM data.answers WHERE reported = 0) a
-        ON ( q.question_id = a.questionId_fromAnswers)
+        ON (q.question_id = a.questionId_fromAnswers)
         LEFT JOIN (SELECT answer_id AS answerId_fromPhotos, id AS photo_id, url FROM data.photos) p
         ON (a.answer_id = p.answerId_fromPhotos)`,
       values: [product_id, records.limit, records.offset],
@@ -22,7 +22,7 @@ module.exports = {
           questions[currQ] = {
             question_id: currQ,
             question_body: table.question_body,
-            question_date: table.question_date,
+            question_date: table.question_date + 'T00:00:00.000Z',
             asker_name: table.asker_name,
             reported: table.reported,
             question_helpfulness: table.helpful,
@@ -42,10 +42,9 @@ module.exports = {
                 answers[table.answer_id].photos = table.url === null ? [] : [table.url]
               } else {
                 if (table.url !== null) {
-                  answers[table.answer_id].url.push(table.url)
+                  answers[table.answer_id].photos.push(table.url)
                 }
               }
-
             }
           });
           questions[currQ].answers = answers;
@@ -55,8 +54,6 @@ module.exports = {
         product_id: product_id.toString(),
         results: Object.values(questions)
       }
-      console.log(questions)
-      // EDGE CASE: no questions: result is []
       toController(null, data);
     });
   },
@@ -68,9 +65,9 @@ module.exports = {
       text: 'INSERT into data.questions(asker_name, asker_email, question_body, product_id, question_date) VALUES($1, $2, $3, $4, $5) RETURNING *',
       values: [name, email, body, Number(product_id), date_written]
     }
-    console.log('Creating new question entry...')
+    // console.log('Creating new question entry...')
     dbQuery(params).then(res => {
-      console.log('DONE');
+      // console.log('DONE');
       toController(null, res);
     })
   },
