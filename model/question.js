@@ -5,19 +5,59 @@ module.exports = {
   get: (product_id, records, toController) => { 
     const params = {
       text: `SELECT *  
-      FROM data.questions 
-      LEFT JOIN data.answers ON (data.answers.question_id = data.questions.question_id)
-      LEFT JOIN data.photos ON (data.photos.answer_id = data.answers.answer_id) WHERE product_id = $1`,
-        // `SELECT *  
-        // FROM (SELECT * FROM data.questions WHERE product_id = $1 AND data.questions.reported = 0 LIMIT $2 OFFSET $3) q
-        // LEFT JOIN data.answers ON (data.answers.question_id = q.question_id)
-        // LEFT JOIN data.photos ON (data.photos.answer_id = data.answers.answer_id)`,
-        
-      values: [product_id], //, records.limit, records.offset
+        FROM (SELECT * FROM data.questions WHERE product_id = $1 AND data.questions.reported = 0 LIMIT $2 OFFSET $3) q
+        LEFT JOIN (SELECT answer_id, question_id AS questionId_fromAnswers, body AS a_body, date AS a_date, answerer_name, reported AS a_reported, helpful AS a_helpful FROM data.answers WHERE reported = 0) a
+        ON ( q.question_id = a.questionId_fromAnswers)
+        LEFT JOIN (SELECT answer_id AS answerId_fromPhotos, id AS photo_id, url FROM data.photos) p
+        ON (a.answer_id = p.answerId_fromPhotos)`,
+      values: [product_id, records.limit, records.offset],
     }
     dbQuery(params)
-    .then (result => {
-      toController(null, result)
+    .then (tables => { 
+      // get questions
+      let questions = {};
+      for (table of tables) {
+        let currQ = table.question_id;
+        if (questions[currQ] === undefined) {
+          questions[currQ] = {
+            question_id: currQ,
+            question_body: table.question_body,
+            question_date: table.question_date,
+            asker_name: table.asker_name,
+            reported: table.reported,
+            question_helpfulness: table.helpful,
+          }
+          // get answers for currQ
+          let answers = {};
+          tables.forEach(table => {
+            if (table.question_id === currQ) {
+              if (answers[table.answer_id] === undefined) {
+                answers[table.answer_id] = {
+                  id: table.answer_id,
+                  body: table.a_body,
+                  date: table.a_date,
+                  answerer_name: table.answerer_name,
+                  helpfulness: table.a_helpful
+                }
+                answers[table.answer_id].photos = table.url === null ? [] : [table.url]
+              } else {
+                if (table.url !== null) {
+                  answers[table.answer_id].url.push(table.url)
+                }
+              }
+
+            }
+          });
+          questions[currQ].answers = answers;
+        }
+      }
+      let data = {
+        product_id: product_id.toString(),
+        results: Object.values(questions)
+      }
+      console.log(questions)
+      // EDGE CASE: no questions: result is []
+      toController(null, data);
     });
   },
 
