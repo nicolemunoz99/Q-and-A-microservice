@@ -5,7 +5,7 @@
   "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "nodemon": "./server.js"
+    "start": "nodemon ./server.js"
   },
   "repository": {
     "type": "git",
@@ -20,9 +20,11 @@
   "homepage": "https://github.com/Team-JAN/QandA_API#readme",
   "dependencies": {
     "express": "^4.17.1",
+    "newrelic": "^6.2.0",
     "pg": "^7.15.1"
   },
   "devDependencies": {
+    "artillery": "^1.6.0-29",
     "nodemon": "^2.0.2"
   }
 }

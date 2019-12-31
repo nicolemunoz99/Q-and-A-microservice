@@ -64,10 +64,10 @@ module.exports = {
         };
         promises.push(fn());
       })
-      console.log('Getting questions with answers ....')
+      // console.log('Getting questions with answers ....')
       
       Promise.all(promises).then(result => {
-        console.log('DONE');
+        // console.log('DONE');
         toController(null, result);
       })
 
