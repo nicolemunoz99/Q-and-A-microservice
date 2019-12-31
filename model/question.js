@@ -2,75 +2,22 @@ var dbQuery = require('../db/index.js')
 
 module.exports = {
 
-  get: (product_id, records, toController) => {
+  get: (product_id, records, toController) => { 
     const params = {
-      text: `SELECT * FROM data.questions WHERE product_id = $1 AND reported = 0 LIMIT $2 OFFSET $3`,
-      values: [product_id, records.limit, records.offset],
+      text: `SELECT *  
+      FROM data.questions 
+      LEFT JOIN data.answers ON (data.answers.question_id = data.questions.question_id)
+      LEFT JOIN data.photos ON (data.photos.answer_id = data.answers.answer_id) WHERE product_id = $1`,
+        // `SELECT *  
+        // FROM (SELECT * FROM data.questions WHERE product_id = $1 AND data.questions.reported = 0 LIMIT $2 OFFSET $3) q
+        // LEFT JOIN data.answers ON (data.answers.question_id = q.question_id)
+        // LEFT JOIN data.photos ON (data.photos.answer_id = data.answers.answer_id)`,
+        
+      values: [product_id], //, records.limit, records.offset
     }
     dbQuery(params)
-    .then (questions => {
-      let promises = [];
-      questions.forEach(q => {
-        let answerParams = {
-          text: `SELECT * FROM data.answers WHERE question_id = $1 AND reported = 0`,
-          values: [q.question_id],
-        }
-        const fn = () => {
-          return new Promise((resolve, reject) => {
-            dbQuery(answerParams).then (answers => {
-              q.answers = {};
-              q.question_date = q.question_date + 'T00:00:00.000Z';
-              q.question_helpfulness = q.helpful;
-              delete q.helpful;
-              delete q.asker_email;
-              delete q.product_id;
-
-              // promise function to get photos - resolves on answer
-              let photoPromises = [];
-
-              answers.forEach(a => {
-                const getPhotos = () => {
-                return new Promise((resolve, reject) => {   
-                  // query photos table
-                  let photoParams = {
-                    text: `SELECT * FROM data.photos WHERE answer_id = $1`,
-                    values: [a.answer_id], 
-                  }
-                  dbQuery(photoParams).then(photos => {
-                    a.photos = photos.map(photo => photo.url)
-                    a.id = a.answer_id;
-                    a.helpfulness = a.helpful;
-                    a.date = a.date + 'T00:00:00.000Z'
-                    delete a.answer_id;
-                    delete a.helpful;
-                    delete a.answerer_email;
-                    delete a.question_id;
-                    resolve(a)
-                  });
-                });
-                }
-                photoPromises.push(getPhotos());
-              });
-
-              Promise.all(photoPromises).then(answersWithPhotos => {
-                answersWithPhotos.forEach(a => {
-                  q.answers[a.id] = a;
-                });
-                resolve(q);
-              });
-
-            });
-          })
-        };
-        promises.push(fn());
-      })
-      // console.log('Getting questions with answers ....')
-      
-      Promise.all(promises).then(result => {
-        // console.log('DONE');
-        toController(null, result);
-      })
-
+    .then (result => {
+      toController(null, result)
     });
   },
 
