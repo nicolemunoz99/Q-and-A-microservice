@@ -95,13 +95,47 @@ module.exports = {
   },
 
   delete: (question_id, toController) => {
-    const params = {
+    let deletionPromises = [];
+    const delQuestionParams = {
       name: 'delete-question',
       text: 'DELETE FROM data.questions WHERE question_id = $1',
       values: [question_id]
     }
-    dbQuery(params).then(res => {
-      toController(null, res);
-    });
+    const delAnswersParams = {
+      name: 'delete-answers',
+      text: 'DELETE FROM data.answers WHERE question_id = $1',
+      values: [question_id]
+    }
+    deletionPromises.push(dbQuery(delQuestionParams));
+    deletionPromises.push(dbQuery(delAnswersParams));
+    const getAnsParams = {
+      name: 'get-answers-ids',
+      text: 'SELECT answer_id FROM data.answers where question_id = $1',
+      values: [question_id]
+    };
+    dbQuery(getAnsParams).then(id_results => { // answer_ids to delete from photos
+      answer_ids = [];
+      id_results.forEach(id => answer_ids.push(id.answer_id))
+      console.log('answer ids to delete', answer_ids)
+      const delPhotosParams = {
+        name: 'delete-photos',
+        text: `DELETE FROM data.photos WHERE answer_id = ANY(${})` // TO DO: fill in with answer_ids array
+      }
+
+    })
+
+    // make promises of everything to delete
+    
+
+
+    
+    
+
+    
+    // Promise.all(delPromises)
+    // .then(res => {
+    //   console.log('del res', res)
+    //   toController(null, res);
+    // });
   }
 }
