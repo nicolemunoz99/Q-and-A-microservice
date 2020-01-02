@@ -113,29 +113,17 @@ module.exports = {
       text: 'SELECT answer_id FROM data.answers where question_id = $1',
       values: [question_id]
     };
-    dbQuery(getAnsParams).then(id_results => { // answer_ids to delete from photos
-      answer_ids = [];
-      id_results.forEach(id => answer_ids.push(id.answer_id))
-      console.log('answer ids to delete', answer_ids)
+    dbQuery(getAnsParams).then(answer_ids => { // answer_ids to delete from photos
+      answer_ids = answer_ids.map(item => item.answer_id)
       const delPhotosParams = {
         name: 'delete-photos',
-        text: `DELETE FROM data.photos WHERE answer_id = ANY(${})` // TO DO: fill in with answer_ids array
+        text: `DELETE FROM data.photos WHERE answer_id = ANY($1)`, // TO DO: fill in with answer_ids array
+        values: [answer_ids]
       }
-
+      deletionPromises.push(dbQuery(delPhotosParams));
+      Promise.all(deletionPromises).then(() => {
+        toController(null, 'deleted ')
+      })
     })
-
-    // make promises of everything to delete
-    
-
-
-    
-    
-
-    
-    // Promise.all(delPromises)
-    // .then(res => {
-    //   console.log('del res', res)
-    //   toController(null, res);
-    // });
   }
 }

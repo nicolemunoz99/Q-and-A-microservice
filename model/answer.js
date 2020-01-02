@@ -102,13 +102,29 @@ module.exports = {
   },
 
   delete: (answer_id, toController) => {
+    let deletionPromises = [];
     const params = {
       name: 'delete-answer',
       text: 'DELETE FROM data.answers WHERE answer_id = $1',
       values: [answer_id],
     }
-    dbQuery(params).then(() => {
-      toController(null, 'answer has been deleted')
+    deletionPromises.push(dbQuery(params));
+    const getPhotosParams = {
+      name: 'get-photo-ids',
+      text: 'SELECT id from data.photos WHERE answer_id = $1',
+      values: [answer_id],
+    }
+    dbQuery(getPhotosParams).then((photoIds) => {
+      photoIds = photoIds.map(item => item.id)
+      const deletePhotosParams = {
+        name: 'delete-photos',
+        text: `DELETE FROM data.photos WHERE id = ANY($1)`,
+        values: [photoIds]
+      }
+      deletionPromises.push(dbQuery(deletePhotosParams));
+      Promise.all(deletionPromises).then(() => {
+        toController(null, 'deleted')
+      })
     })
   }
 }
