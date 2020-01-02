@@ -37,7 +37,7 @@ module.exports = {
                 answers[table.answer_id] = {
                   id: table.answer_id,
                   body: table.a_body,
-                  date: table.a_date,
+                  date: table.a_date + 'T00:00:00.000Z',
                   answerer_name: table.answerer_name,
                   helpfulness: table.a_helpful
                 }
