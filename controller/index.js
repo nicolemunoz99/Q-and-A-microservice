@@ -79,10 +79,10 @@ module.exports = {
         else {
           // let timerStop = Date.now();
           // console.log(`time(ms) to get q's for product ${req.params.product_id}: `, timerStop - timerStart)
-          result = {
-            product_id: req.params.product_id,
-            results: result
-          }
+          // result = {
+          //   product_id: req.params.product_id,
+          //   results: result
+          // }
           res.send(result);
         }
       });   

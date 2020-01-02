@@ -4,44 +4,37 @@ module.exports = {
   get: (question_id, records, toController) => {
     const params = {
       name: 'get-answers',
-      text: `SELECT * FROM data.answers WHERE question_id = $1 AND reported = 0 LIMIT $2 OFFSET $3`,
+      text: `SELECT * 
+      FROM (SELECT * FROM data.answers WHERE question_id = $1 AND reported = 0 LIMIT $2 OFFSET $3) a
+      LEFT JOIN (SELECT answer_id AS answerId_fromPhotos, url FROM data.photos) p
+      ON (a.answer_id = p.answerId_fromPhotos)`,
       values: [question_id, records.limit, records.offset],
     }
     dbQuery(params)
-    .then(answers => {
-      let photoPromises = [];
-      answers.forEach(a => {
-        const getPhotos = () => {
-          return new Promise((resolve, reject) => {
-            const photoParams = {
-              name: 'get-photos',
-              text: `SELECT * FROM data.photos WHERE answer_id = $1`,
-              values: [a.answer_id],
-            }
-            dbQuery(photoParams).then(photos => {
-              photos.forEach(p => delete p.answer_id)
-              a.photos = photos
-              a.helpfulness = a.helpful;
-              a.date = a.date + 'T00:00:00.000Z';
-              delete a.helpful;
-              delete a.answerer_email;
-              delete a.question_id;
-
-              resolve(a)
-            })
-          })
+    .then(tables => {
+      let answers = {};
+      for (table of tables) {
+        let currA = table.answer_id
+        if (answers[currA] === undefined) {
+          answers[currA] = {
+            answer_id: table.answer_id,
+            body: table.body,
+            date: table.date + 'T00:00:00.000Z',
+            answerer_name: table.answerer_name,
+            helpfulness: table.helpful,
+          };
+          answers[currA].photos = table.url === null ? [] : [table.url];
+        } else {
+          if (table.url !== null) { answers[currA].photos.push(table.url) }
         }
-        photoPromises.push(getPhotos());
-      })
-      Promise.all(photoPromises).then (answersWithPhotos => {
-        result = {
-          question: question_id,
-          page: records.page,
-          count: records.limit,
-          results: answersWithPhotos
-        }
-        toController(null, result)
-      })
+      }
+      let data = {
+        question: question_id.toString(),
+        page: records.page,
+        count: records.limit,
+        results: Object.values(answers)
+      }
+      toController(null, data);
     })
       
   
@@ -109,13 +102,29 @@ module.exports = {
   },
 
   delete: (answer_id, toController) => {
+    let deletionPromises = [];
     const params = {
       name: 'delete-answer',
       text: 'DELETE FROM data.answers WHERE answer_id = $1',
       values: [answer_id],
     }
-    dbQuery(params).then(() => {
-      toController(null, 'answer has been deleted')
+    deletionPromises.push(dbQuery(params));
+    const getPhotosParams = {
+      name: 'get-photo-ids',
+      text: 'SELECT id from data.photos WHERE answer_id = $1',
+      values: [answer_id],
+    }
+    dbQuery(getPhotosParams).then((photoIds) => {
+      photoIds = photoIds.map(item => item.id)
+      const deletePhotosParams = {
+        name: 'delete-photos',
+        text: `DELETE FROM data.photos WHERE id = ANY($1)`,
+        values: [photoIds]
+      }
+      deletionPromises.push(dbQuery(deletePhotosParams));
+      Promise.all(deletionPromises).then(() => {
+        toController(null, 'deleted')
+      })
     })
   }
 }
