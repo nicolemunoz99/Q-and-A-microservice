@@ -67,9 +67,7 @@ module.exports = {
       text: 'INSERT into data.questions(asker_name, asker_email, question_body, product_id, question_date) VALUES($1, $2, $3, $4, $5) RETURNING *',
       values: [name, email, body, Number(product_id), date_written]
     }
-    // console.log('Creating new question entry...')
     dbQuery(params).then(res => {
-      // console.log('DONE');
       toController(null, res);
     })
   },

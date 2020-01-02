@@ -41,17 +41,13 @@ module.exports = {
   },
 
   post: (data, toController) => {
-    console.log('data: ', data)
     const params = {
       name: 'post-an-answer',
       text: `INSERT into data.answers(question_id, body, date, answerer_name, answerer_email) VALUES($1, $2, $3, $4, $5) RETURNING *`,
       values: [data.question_id, data.body, data.date_written, data.name, data.email]
     }
-    console.log(params.values)
     dbQuery(params).then((result) => {
-      console.log('Created new answer entry: ', result)
       if (data.photos.length > 0 && data.photos[0] !== '') {
-        console.log('processing photos...')
         let promises = [];
         data.photos.forEach(photo => {
           const postPhoto = () => {
@@ -70,7 +66,6 @@ module.exports = {
         });
         
         Promise.all(promises).then(postedPhotos => {
-          console.log('photos posted', postedPhotos);
           toController(null, 'done creating entry');
         })
       }
