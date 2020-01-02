@@ -31,7 +31,9 @@ module.exports = {
           let answers = {};
           tables.forEach(table => {
             if (table.question_id === currQ) {
-              if (answers[table.answer_id] === undefined) {
+              if (table.answer_id === null) {
+                // do nothing
+              } else if (answers[table.answer_id] === undefined) {
                 answers[table.answer_id] = {
                   id: table.answer_id,
                   body: table.a_body,
