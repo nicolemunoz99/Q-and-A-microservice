@@ -1,3 +1,4 @@
 node_modules
 newrelic_agent.log
 /db/postgresDb/pg_deploy/deploy_data
+/load_balancer/
