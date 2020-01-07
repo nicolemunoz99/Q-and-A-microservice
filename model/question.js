@@ -31,11 +31,13 @@ module.exports = {
           let answers = {};
           tables.forEach(table => {
             if (table.question_id === currQ) {
-              if (answers[table.answer_id] === undefined) {
+              if (table.answer_id === null) {
+                // do nothing
+              } else if (answers[table.answer_id] === undefined) {
                 answers[table.answer_id] = {
                   id: table.answer_id,
                   body: table.a_body,
-                  date: table.a_date,
+                  date: table.a_date + 'T00:00:00.000Z',
                   answerer_name: table.answerer_name,
                   helpfulness: table.a_helpful
                 }
@@ -65,9 +67,7 @@ module.exports = {
       text: 'INSERT into data.questions(asker_name, asker_email, question_body, product_id, question_date) VALUES($1, $2, $3, $4, $5) RETURNING *',
       values: [name, email, body, Number(product_id), date_written]
     }
-    // console.log('Creating new question entry...')
     dbQuery(params).then(res => {
-      // console.log('DONE');
       toController(null, res);
     })
   },
