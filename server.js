@@ -5,8 +5,12 @@ var router = require('./routes/index.js');
 var app = express();
 const port = 8000;
 const bodyParser = require('body-parser');
+const cors = require('cors');
 
-app.use(express.static('../fec/dist'))
+const corsOptions = { origin: 'http://18.222.206.140:8080' };
+app.use('*', cors(corsOptions));
+
+// app.use(express.static('../fec/dist'))
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());

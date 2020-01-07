@@ -3,4 +3,4 @@ node_modules
 newrelic.js
 loadScript.yml
 newrelic_agent.log
-/db/postgresDb/pg_deploy/deploy_data/
+/db/postgres/Db/pg_deploy/deploy_data

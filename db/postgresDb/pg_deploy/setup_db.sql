@@ -18,6 +18,7 @@ CREATE TABLE data.questions(
 TRUNCATE data.questions CASCADE;
 COPY data.questions FROM '/csv_data/questions.csv' CSV HEADER;
 SELECT setval('data.questions_question_id_seq'::regclass, (SELECT MAX(question_id) FROM data.questions));
+CREATE INDEX product_id_idx ON data.questions (product_id);
 
 
 
@@ -36,7 +37,7 @@ CREATE TABLE data.answers(
 TRUNCATE data.answers CASCADE;
 COPY data.answers FROM '/csv_data/answers.csv' CSV HEADER;
 SELECT setval('data.answers_answer_id_seq'::regclass, (SELECT MAX(answer_id) FROM data.answers));
-
+CREATE INDEX question_id_idx ON data.answers (question_id);
 
 
 
@@ -51,3 +52,4 @@ CREATE TABLE data.photos(
 TRUNCATE data.photos;
 COPY data.photos FROM '/csv_data/photos.csv' CSV HEADER;
 SELECT setval('data.photos_id_seq'::regclass, (SELECT MAX(id) FROM data.photos));
+CREATE INDEX answer_id_idx on data.photos(answer_id);

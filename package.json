@@ -19,6 +19,7 @@
   },
   "homepage": "https://github.com/Team-JAN/QandA_API#readme",
   "dependencies": {
+    "cors": "^2.8.5",
     "express": "^4.17.1",
     "newrelic": "^6.2.0",
     "pg": "^7.15.1"
