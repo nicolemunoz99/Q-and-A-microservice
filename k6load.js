@@ -2,11 +2,13 @@ import http from "k6/http";
 import { sleep } from "k6";
 
 export let options = {
-  vus: 100,
+  vus: 10000,
   duration: "10s"
 };
 
 export default function() {
-  http.get("http://127.0.0.1:8000/qa/5");
+  
+  let id = Math.floor(Math.random() * 1000000)
+  http.get(`http://18.222.206.140:8000/qa/${id}`);
   sleep(1);
 };
