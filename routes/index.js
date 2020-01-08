@@ -21,7 +21,7 @@ router.put('/answer/:answer_id/helpful', answer.helpful);
 
 router.put('/answer/:answer_id/report', answer.report);
 
-router.delete('/answer/:answer_id/delete', answer.delete);
+router.delete('/answer/:answer_id', answer.delete);
 
 
 // question routes
@@ -33,6 +33,6 @@ router.put ('/question/:question_id/helpful', question.helpful);
 
 router.put('/question/:question_id/report', question.report);
 
-router.delete('/question/:question_id/delete', question.delete);
+router.delete('/question/:question_id', question.delete);
 
 module.exports = router;
