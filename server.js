@@ -1,4 +1,3 @@
-require('newrelic');
 var express = require('express');
 // var router = express.Router();
 var router = require('./routes/index.js');
@@ -7,8 +6,8 @@ const port = 8000;
 const bodyParser = require('body-parser');
 const cors = require('cors');
 
-const corsOptions = { origin: 'http://18.222.206.140:8080' };
-app.use('*', cors(corsOptions));
+// const corsOptions = { origin: 'http://18.222.206.140:8080' };
+app.use('*', cors());
 
 // app.use(express.static('../fec/dist'))
 
