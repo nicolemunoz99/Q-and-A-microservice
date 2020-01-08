@@ -11,14 +11,26 @@ var mongoose = require('mongoose');
 //Define schemas
 var Schema = mongoose.Schema;
 
-var dataSchema = new Schema({});
+var dataSchema = new Schema({
+  _id: Number,
+  questions: []
+});
 
-dataSchema.statics.getByProduct = cb => {
-  return this.model
-}
+var questionSchema = new Schema({
+  id: Number,
+  product_id: Number,
+  body: String,
+  date_written: String,
+  asker_name: String,
+  asker_email: String,
+  reported: Number,
+  helpful: Number,
+  answers: []
+})
 
-var Data = mongoose.model('dataModel', dataSchema, 'data');
 
 
+var Data = mongoose.model('dataModel', dataSchema, 'questions_aggr');
 
-module.exports = mongoQuery;
+
+module.exports = Data;
