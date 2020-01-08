@@ -1,5 +1,8 @@
-const qModel = require('../model/question.js')
-const aModel = require('../model/answer.js')
+// const qModel = require('../model/question.js')
+// const aModel = require('../model/answer.js')
+
+const qModel = require('../model/question_nosql.js');
+const aModel = require('../model/answer_nosql.js');
 
 module.exports = {
   
