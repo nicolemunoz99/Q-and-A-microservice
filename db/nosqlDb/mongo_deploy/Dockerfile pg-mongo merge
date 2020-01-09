@@ -1,0 +1,9 @@
+FROM mongo:4.0
+
+COPY --from=nemunoz/shopping-portal-db:latest /csv_data /csv_data
+
+# run bash script to import csv's into mongoDB collections
+
+COPY ./aggregate.js /docker-entrypoint-initdb.d/aggregate.js
+
+EXPOSE 27017
