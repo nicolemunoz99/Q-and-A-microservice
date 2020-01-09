@@ -64,7 +64,6 @@ module.exports = {
       qModel.get(req.params.product_id, req.records, (err, result) => {
         if (err) { res.sendStatus(400) }
         else {
-          console.log('res', result)
           res.send(result);
         }
       });   
