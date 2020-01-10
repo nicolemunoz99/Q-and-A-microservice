@@ -11,6 +11,11 @@ const handler = (req, res) => {
   index = (index + 1) % servers.length;
 }
 
+// load-io access key
+app.get('/loaderio-c63df928f580dbf278b6ce3dd6e6b1dd.txt', (req, res) => {
+  res.sendfile('./loaderio-c63df928f580dbf278b6ce3dd6e6b1dd.txt');
+})
+
 const server = app.get('*', handler).post('*', handler).put('*', handler).delete('*', handler);
 
 server.listen(7500);

@@ -46,11 +46,11 @@ db.questions_aggr.createIndex({'questions.answers.id': 1})
 
 db.questions_aggr.updateMany({}, { $rename: {"questions": "results"} })
 
-db.photos.remove()
-db.answers.remove()
-db.questions.remove()
-db.photos_aggr.remove()
-db.answers_aggr.remove()
+db.photos.drop()
+db.answers.drop()
+db.questions.drop()
+db.photos_aggr.drop()
+db.answers_aggr.drop()
 
 
 printjson('DONE CREATING DB')
