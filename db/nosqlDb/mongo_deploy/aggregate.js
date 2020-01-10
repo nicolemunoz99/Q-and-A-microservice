@@ -17,10 +17,6 @@ db.photos.aggregate( [ { $group : { _id : "$answer_id", photos: { $push: "$$ROOT
 let i = 0;
 db.photos_aggr.find().forEach(function(doc) {
   db.answers.findOneAndUpdate({id: doc._id}, {$set: {"photos": doc.photos}}, {returnNewDocument: true})
-  if (i % 5000 === 0) {
-    printjson({'i':i})
-  }
-  i++
 })
 
 i = 0;
@@ -34,10 +30,7 @@ printjson('now updating questions with answers...')
 
 db.answers_aggr.find().forEach(function(doc) {
   db.questions.findOneAndUpdate({id: doc._id}, {$set: {"answers": doc.answers}})
-  if (i % 5000 === 0) {
-    printjson({'i':i})
-  }
-  i++
+
 })
 
 
