@@ -10,6 +10,9 @@ const handler = (req, res) => {
   req.pipe(request({url: servers[index] + req.url})).pipe(res);
   index = (index + 1) % servers.length;
 }
+app.get('/loaderio-c63df928f580dbf278b6ce3dd6e6b1dd.txt', (req, res) => {
+  res.sendfile('./loaderio-c63df928f580dbf278b6ce3dd6e6b1dd.txt');
+})
 
 const server = app.get('*', handler).post('*', handler).put('*', handler).delete('*', handler);
 
