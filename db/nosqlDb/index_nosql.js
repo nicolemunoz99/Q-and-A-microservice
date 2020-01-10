@@ -1,7 +1,7 @@
 var mongoose = require('mongoose');
-var mongoDB = 'mongodb://127.0.0.1:27017/qanda';
+var mongoDB = 'mongodb://3.133.93.24:27017/qanda';
 // var autoIncrement = require('mongoose-auto-increment');
-var connection = mongoose.connect('mongodb://127.0.0.1:27017/qanda', { useNewUrlParser: true })
+var connection = mongoose.connect('mongodb://3.133.93.24:27017/qanda', { useNewUrlParser: true })
 
 
 var db = mongoose.connection;
@@ -55,11 +55,6 @@ var Data = mongoose.model('dataModel', dataSchema, 'questions_aggr');
 var Question = mongoose.model('questionModel', questionSchema);
 var Answer = mongoose.model('answerModel', answerSchema);
 var Photo = mongoose.model('photoModel', photoSchema);
-
-
-Data.count({}, function(err, count) {
-  console.log('hi',count)
-})
 
 
 let mongodb = {Data, Question, Answer, Photo}
