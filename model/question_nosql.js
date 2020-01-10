@@ -1,5 +1,5 @@
 var Data = require('../db/nosqlDb/index_nosql.js').Data;
-var db = require('../db/nosqlDb/index_nosql.js');
+// var db = require('../db/nosqlDb/index_nosql.js');
 
 module.exports = {
   get: (product_id, records, toController) => {
@@ -7,7 +7,6 @@ module.exports = {
       findOne().
       where('_id').equals(product_id).
       exec((err, data) => {
-        
         if (data === null) {
           let result = {
             product_id: product_id.toString(),
@@ -55,24 +54,25 @@ module.exports = {
         
       })
 
-  },
-
-  post: (data, toController) => {
-    console.log('data', data)
-
-    Data.findOne({'_id': Number(data.product_id)}, (err, doc) => {
-      let newQuestion = new db.Question({
-        product_id: data.product_id,
-        body: data.body,
-        date_written: data.date_written,
-        asker_name: data.name,
-        asker_email: data.email
-      })
-      console.log('doc', newQuestion)
-    })
-
-    toController(null, null)
   }
+  // ,
+
+  // post: (data, toController) => {
+  //   console.log('data', data)
+
+  //   Data.findOne({'_id': Number(data.product_id)}, (err, doc) => {
+  //     let newQuestion = new db.Question({
+  //       product_id: data.product_id,
+  //       body: data.body,
+  //       date_written: data.date_written,
+  //       asker_name: data.name,
+  //       asker_email: data.email
+  //     })
+  //     console.log('doc', newQuestion)
+  //   })
+
+  //   toController(null, null)
+  // }
 }
 
 const renameKey = (obj, origKey, newKey) => {
