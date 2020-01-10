@@ -30,6 +30,10 @@ app.use(requestTime);
 
 app.use('/qa/', router);
 
+app.get('/loaderio-c63df928f580dbf278b6ce3dd6e6b1dd.txt', (req, res) => {
+  res.send('loaderio-c63df928f580dbf278b6ce3dd6e6b1dd')
+})
+
 
 app.listen(port, () => console.log('Server listening on port ' + port));
 
