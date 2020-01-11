@@ -1,4 +1,5 @@
 var express = require('express');
+
 // var router = express.Router();
 var router = require('./routes/index.js');
 var app = express();
@@ -6,10 +7,7 @@ const port = 8000;
 const bodyParser = require('body-parser');
 const cors = require('cors');
 
-// const corsOptions = { origin: 'http://18.222.206.140:8080' };
 app.use('*', cors());
-
-// app.use(express.static('../fec/dist'))
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
