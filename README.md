@@ -8,7 +8,7 @@ System design for the question-and-answers portion of a retail portal's product 
 * PostgreSQL (and MongoDB for performance comparison)
 
 ### Docker Images
-I testing performance with SQL and noSQL databases. Since the data scrubbing was a little different, I have database-specific APIs.
+I tested service performance with SQL and noSQL databases. Since the data scrubbing was a little different for the two, I have database-specific APIs.
 
 SQL:
 * [PostgreSQL database] (https://hub.docker.com/r/nemunoz/shopping-portal-db)
@@ -19,3 +19,4 @@ noSQL:
 * [API with data scrubbing for MongoDB] (https://hub.docker.com/r/nemunoz/shopping-portal-api-nosql)
 
 ### System Overview
+(I chose to use human stick figures instead of personal computers as the origin of requests, because I think it's important to consider the fact that humans are interacting with what one designs)
