@@ -5,7 +5,8 @@ System design for the question-and-answers portion of a retail portal's product 
 
 ### Buit With
 * Express (load balancer and API servers)
-* PostgreSQL (and MongoDB for performance comparison)
+* PostgreSQL
+* MongoDB (with Mongoose)
 
 ### Docker Images
 I tested service performance with both SQL and noSQL databases. The data shape was a little different for the two, so the re-shaping process for the SQL and noSQL implementations differed, which is why I have database-specific APIs.
