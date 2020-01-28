@@ -20,6 +20,6 @@ noSQL:
 * API with data scrubbing for MongoDB: [nemunoz/shopping-portal-api-nosql](https://hub.docker.com/r/nemunoz/shopping-portal-api-nosql)
 
 ### System Overview
-(I chose to use human stick figures instead of personal computers as the origin of requests, because I think it's important to consider the fact that humans are interacting with what one designs)
+I chose to use human stick figures instead of personal computers as a way to remind myself -- as I can get hyper-focused on instances, containers, etc -- that people are actually the origin of requests in this system.
 
 ![System Design](https://github.com/nicolemunoz99/Q-and-A-microservice/blob/master/system-diagram.jpg)
